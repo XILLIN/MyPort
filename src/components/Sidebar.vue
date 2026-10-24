@@ -136,7 +136,7 @@ onUnmounted(() => {
       <!-- Avatar with animated neon glow -->
       <div class="relative mb-3">
         <div class="w-20 h-20 rounded-full border-2 border-primary/50 flex items-center justify-center bg-bg overflow-hidden glow-green">
-          <span class="text-3xl select-none">👨‍💻</span>
+          <img src="/profile.jpg" class="w-full h-full object-cover" alt="Profile avatar">
         </div>
         <!-- Orbiting dot -->
         <span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-primary animate-ping" />
