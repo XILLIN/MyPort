@@ -47,6 +47,7 @@ function isImage(file) {
   return /\.(jpg|jpeg|png|webp|svg|gif|avif)$/i.test(file || '')
 }
 
+const baseUrl = import.meta.env.BASE_URL
 const certs = [
   {
     title: 'Cyber Boot Camp',
@@ -54,7 +55,7 @@ const certs = [
     date: '21 Aug 2026',
     icon: '🔐',
     color: '#00F5A0',
-    file: '/certificates/cyber_cert.jpg',
+    file: `${baseUrl}certificates/cyber_cert.jpg`,
   },
 ]
 </script>
