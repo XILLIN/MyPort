@@ -37,32 +37,34 @@ function toggleLanguage() {
     </main>
 
     <!-- Editorial Site Footer -->
-    <footer class="px-6 sm:px-10 pb-10 pt-4 font-hn text-cream">
-      <div class="h-0.5 w-full bg-cream mb-8" />
+    <footer class="pb-12 pt-4 font-hn text-cream">
+      <div class="editorial-shell">
+        <div class="h-0.5 w-full bg-cream mb-8" />
 
-      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 text-xs sm:text-sm">
-        <div class="space-y-1">
-          <p>{{ t.footer.left }}</p>
-          <p class="text-cream/45">&copy; {{ new Date().getFullYear() }} {{ t.brand }}</p>
-        </div>
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 text-xs sm:text-sm">
+          <div class="space-y-1">
+            <p>{{ t.footer.left }}</p>
+            <p class="font-mono text-xs text-cream/45">&copy; {{ new Date().getFullYear() }} {{ t.brand }}</p>
+          </div>
 
-        <div class="flex items-center gap-8">
-          <button
-            type="button"
-            @click="toggleLanguage"
-            class="cursor-pointer text-xs uppercase tracking-[0.18em] text-cream/60 transition-opacity duration-300 hover:text-cream"
-          >
-            {{ lang === 'en' ? 'EN / TH' : 'TH / EN' }}
-          </button>
+          <div class="flex items-center gap-8">
+            <button
+              type="button"
+              @click="toggleLanguage"
+              class="cursor-pointer font-mono text-xs uppercase tracking-[0.18em] text-cream/60 transition-colors duration-300 hover:text-cream"
+            >
+              {{ lang === 'en' ? 'EN / TH' : 'TH / EN' }}
+            </button>
 
-          <button
-            type="button"
-            @click="scrollToTop"
-            class="inline-flex items-center gap-1.5 cursor-pointer text-cream transition-opacity duration-300 hover:opacity-60"
-          >
-            <span>{{ t.footer.backToTop }}</span>
-            <ArrowUp :size="15" :stroke-width="1.5" />
-          </button>
+            <button
+              type="button"
+              @click="scrollToTop"
+              class="inline-flex items-center gap-1.5 cursor-pointer text-cream transition-opacity duration-300 hover:opacity-60"
+            >
+              <span>{{ t.footer.backToTop }}</span>
+              <ArrowUp :size="15" :stroke-width="1.5" />
+            </button>
+          </div>
         </div>
       </div>
     </footer>

@@ -24,7 +24,7 @@ onMounted(() => {
         observer?.disconnect()
       }
     },
-    { threshold: 0.08 }
+    { threshold: 0.06 }
   )
   observer.observe(el)
 })
@@ -65,155 +65,169 @@ function resetForm() {
 </script>
 
 <template>
-  <section id="contact" class="px-6 sm:px-10 py-24 sm:py-36 font-hn text-cream">
-    <div :class="['editorial-rule h-0.5 w-full bg-cream mb-12 sm:mb-16', visible && 'is-visible']" />
+  <section id="contact" class="py-20 sm:py-28 lg:py-28 font-hn text-cream">
+    <div class="editorial-shell">
+      <div :class="['editorial-rule h-0.5 w-full bg-cream mb-12 lg:mb-14', visible && 'is-visible']" />
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-10">
-      <!-- Left Index Column -->
-      <div class="lg:col-span-3">
-        <p class="text-xs uppercase tracking-[0.2em] text-cream/50 sticky top-24">
-          {{ t.contact.index }}
-        </p>
-      </div>
-
-      <!-- Right Content Column -->
-      <div class="lg:col-span-9 space-y-16 sm:space-y-24">
-        <div :class="['editorial-reveal space-y-8', visible && 'is-visible']">
-          <h2 class="text-3xl sm:text-5xl font-normal leading-[1.1] tracking-[-0.02em] text-cream max-w-3xl">
-            {{ t.contact.headline }}
-          </h2>
-
-          <div class="flex flex-wrap items-baseline gap-x-8 gap-y-3">
-            <a
-              href="mailto:inter2546@gmail.com"
-              class="text-2xl sm:text-4xl font-normal tracking-[-0.01em] text-cream border-b border-cream/35 pb-1 transition-opacity duration-300 hover:opacity-60"
-            >
-              inter2546@gmail.com
-            </a>
-
-            <button
-              type="button"
-              @click="copyEmail"
-              class="inline-flex items-center gap-2 cursor-pointer text-xs uppercase tracking-[0.18em] text-cream/60 transition-opacity duration-300 hover:text-cream"
-            >
-              <Check v-if="copied" :size="14" :stroke-width="1.5" />
-              <Copy v-else :size="14" :stroke-width="1.5" />
-              <span>{{ copied ? t.contact.copied : t.contact.copyEmail }}</span>
-            </button>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-12">
+        <!-- Left Index Column -->
+        <div class="lg:col-span-3 2xl:col-span-2">
+          <div class="sticky top-24 space-y-5">
+            <p class="text-xs uppercase tracking-[0.2em] text-cream/55">
+              {{ t.contact.index }}
+            </p>
+            <div class="hidden lg:block pt-5 border-t border-cream/15 space-y-1 font-mono text-xs text-cream/40">
+              <p>Thailand · UTC+7</p>
+              <p>Open for collaboration</p>
+            </div>
           </div>
         </div>
 
-        <!-- Two-Column Channels & Editorial Form -->
-        <div
-          :class="['editorial-reveal grid grid-cols-1 md:grid-cols-12 gap-y-16 md:gap-x-12 pt-10 border-t border-cream/15', visible && 'is-visible']"
-          style="transition-delay: 120ms"
-        >
-          <!-- Direct Channels -->
-          <div class="md:col-span-5 space-y-6">
-            <p class="text-xs uppercase tracking-[0.2em] text-cream/50">
-              {{ t.contact.directLabel }}
-            </p>
+        <!-- Right Content Column -->
+        <div class="lg:col-span-9 2xl:col-span-10 space-y-14 lg:space-y-18">
+          <div :class="['editorial-reveal space-y-7', visible && 'is-visible']">
+            <h2 class="text-3xl sm:text-5xl xl:text-[3.4rem] font-normal leading-[1.1] tracking-[-0.02em] text-cream max-w-5xl">
+              {{ t.contact.headline }}
+            </h2>
 
-            <ul class="border-t border-cream/15">
-              <li
-                v-for="ch in channels"
-                :key="ch.label"
-                class="border-b border-cream/15"
+            <div class="flex flex-wrap items-baseline gap-x-8 gap-y-3">
+              <a
+                href="mailto:inter2546@gmail.com"
+                class="text-2xl sm:text-4xl font-normal tracking-[-0.01em] text-cream border-b border-cream/35 pb-1 transition-opacity duration-300 hover:opacity-60"
               >
-                <a
-                  :href="ch.href"
-                  :target="ch.href.startsWith('http') ? '_blank' : undefined"
-                  :rel="ch.href.startsWith('http') ? 'noopener noreferrer' : undefined"
-                  class="flex items-center justify-between py-4 transition-opacity duration-300 hover:opacity-60"
-                >
-                  <div>
-                    <p class="text-xs uppercase tracking-[0.16em] text-cream/50">
-                      {{ ch.label }}
-                    </p>
-                    <p class="text-base text-cream mt-0.5">
-                      {{ ch.value }}
-                    </p>
-                  </div>
-                  <ArrowUpRight :size="18" :stroke-width="1.5" class="text-cream/70" />
-                </a>
-              </li>
-            </ul>
-          </div>
+                inter2546@gmail.com
+              </a>
 
-          <!-- Editorial Message Form -->
-          <div class="md:col-span-7 space-y-6">
-            <p class="text-xs uppercase tracking-[0.2em] text-cream/50">
-              {{ t.contact.formLabel }}
-            </p>
-
-            <div v-if="sent" class="py-10 border-t border-cream/15 space-y-4">
-              <p class="text-2xl font-normal text-cream">
-                {{ t.contact.sentTitle }}
-              </p>
-              <p class="text-sm text-cream/65 leading-relaxed">
-                {{ t.contact.sentBody }}
-              </p>
               <button
                 type="button"
-                @click="resetForm"
-                class="mt-2 cursor-pointer text-xs uppercase tracking-[0.18em] text-cream border-b border-cream/40 pb-0.5 transition-opacity duration-300 hover:opacity-60"
+                @click="copyEmail"
+                class="inline-flex items-center gap-2 cursor-pointer font-mono text-xs uppercase tracking-[0.18em] text-cream/60 transition-colors duration-300 hover:text-cream"
               >
-                {{ t.contact.sendAnother }}
+                <Check v-if="copied" :size="14" :stroke-width="1.5" />
+                <Copy v-else :size="14" :stroke-width="1.5" />
+                <span>{{ copied ? t.contact.copied : t.contact.copyEmail }}</span>
               </button>
             </div>
+          </div>
 
-            <form v-else @submit.prevent="submitForm" class="space-y-8">
-              <div>
-                <label for="contact-name" class="block text-xs uppercase tracking-[0.18em] text-cream/50 mb-2">
-                  {{ t.contact.nameLabel }}
-                </label>
-                <input
-                  id="contact-name"
-                  v-model="form.name"
-                  type="text"
-                  required
-                  :placeholder="t.contact.namePlaceholder"
-                  class="w-full bg-transparent border-b border-cream/25 py-3 text-base text-cream placeholder-cream/30 focus:outline-none focus:border-cream transition-colors duration-300"
-                />
-              </div>
+          <!-- Two-Column Channels & Editorial Form -->
+          <div
+            :class="['editorial-reveal grid grid-cols-1 md:grid-cols-12 gap-y-14 md:gap-x-12 pt-10 border-t border-cream/15', visible && 'is-visible']"
+            style="transition-delay: 120ms"
+          >
+            <!-- Direct Channels -->
+            <div class="md:col-span-5 space-y-5">
+              <p class="text-xs uppercase tracking-[0.2em] text-cream/50">
+                {{ t.contact.directLabel }}
+              </p>
 
-              <div>
-                <label for="contact-email" class="block text-xs uppercase tracking-[0.18em] text-cream/50 mb-2">
-                  {{ t.contact.emailLabel }}
-                </label>
-                <input
-                  id="contact-email"
-                  v-model="form.email"
-                  type="email"
-                  required
-                  :placeholder="t.contact.emailPlaceholder"
-                  class="w-full bg-transparent border-b border-cream/25 py-3 text-base text-cream placeholder-cream/30 focus:outline-none focus:border-cream transition-colors duration-300"
-                />
-              </div>
-
-              <div>
-                <label for="contact-message" class="block text-xs uppercase tracking-[0.18em] text-cream/50 mb-2">
-                  {{ t.contact.messageLabel }}
-                </label>
-                <textarea
-                  id="contact-message"
-                  v-model="form.message"
-                  required
-                  rows="4"
-                  :placeholder="t.contact.messagePlaceholder"
-                  class="w-full bg-transparent border-b border-cream/25 py-3 text-base text-cream placeholder-cream/30 focus:outline-none focus:border-cream transition-colors duration-300 resize-none"
-                />
-              </div>
-
-              <div class="pt-2">
-                <button
-                  type="submit"
-                  class="cursor-pointer border border-cream px-8 py-3.5 text-xs uppercase tracking-[0.2em] text-cream transition-colors duration-300 hover:bg-cream hover:text-[#0a0a0a]"
+              <ul class="border-t border-cream/15">
+                <li
+                  v-for="ch in channels"
+                  :key="ch.label"
+                  class="border-b border-cream/15"
                 >
-                  {{ t.contact.submit }}
+                  <a
+                    :href="ch.href"
+                    :target="ch.href.startsWith('http') ? '_blank' : undefined"
+                    :rel="ch.href.startsWith('http') ? 'noopener noreferrer' : undefined"
+                    class="group flex items-center justify-between py-4 transition-colors duration-200 hover:bg-cream/[0.025] px-2 -mx-2"
+                  >
+                    <div>
+                      <p class="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/50">
+                        {{ ch.label }}
+                      </p>
+                      <p class="text-base text-cream mt-0.5">
+                        {{ ch.value }}
+                      </p>
+                    </div>
+                    <ArrowUpRight
+                      :size="18"
+                      :stroke-width="1.5"
+                      class="text-cream/60 transition-transform duration-200 group-hover:text-cream group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Editorial Message Form -->
+            <div class="md:col-span-7 space-y-5">
+              <p class="text-xs uppercase tracking-[0.2em] text-cream/50">
+                {{ t.contact.formLabel }}
+              </p>
+
+              <div v-if="sent" class="py-10 border-t border-cream/15 space-y-4">
+                <p class="text-2xl font-normal text-cream">
+                  {{ t.contact.sentTitle }}
+                </p>
+                <p class="text-sm text-cream/65 leading-relaxed">
+                  {{ t.contact.sentBody }}
+                </p>
+                <button
+                  type="button"
+                  @click="resetForm"
+                  class="mt-2 cursor-pointer text-xs uppercase tracking-[0.18em] text-cream border-b border-cream/40 pb-0.5 transition-opacity duration-300 hover:opacity-60"
+                >
+                  {{ t.contact.sendAnother }}
                 </button>
               </div>
-            </form>
+
+              <form v-else @submit.prevent="submitForm" class="space-y-7">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div>
+                    <label for="contact-name" class="block text-xs uppercase tracking-[0.18em] text-cream/50 mb-2">
+                      {{ t.contact.nameLabel }}
+                    </label>
+                    <input
+                      id="contact-name"
+                      v-model="form.name"
+                      type="text"
+                      required
+                      :placeholder="t.contact.namePlaceholder"
+                      class="w-full bg-transparent border-b border-cream/25 py-3 text-base text-cream placeholder-cream/30 focus:outline-none focus:border-cream transition-colors duration-300"
+                    />
+                  </div>
+
+                  <div>
+                    <label for="contact-email" class="block text-xs uppercase tracking-[0.18em] text-cream/50 mb-2">
+                      {{ t.contact.emailLabel }}
+                    </label>
+                    <input
+                      id="contact-email"
+                      v-model="form.email"
+                      type="email"
+                      required
+                      :placeholder="t.contact.emailPlaceholder"
+                      class="w-full bg-transparent border-b border-cream/25 py-3 text-base text-cream placeholder-cream/30 focus:outline-none focus:border-cream transition-colors duration-300"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="contact-message" class="block text-xs uppercase tracking-[0.18em] text-cream/50 mb-2">
+                    {{ t.contact.messageLabel }}
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    v-model="form.message"
+                    required
+                    rows="4"
+                    :placeholder="t.contact.messagePlaceholder"
+                    class="w-full bg-transparent border-b border-cream/25 py-3 text-base text-cream placeholder-cream/30 focus:outline-none focus:border-cream transition-colors duration-300 resize-none"
+                  />
+                </div>
+
+                <div class="pt-2">
+                  <button
+                    type="submit"
+                    class="cursor-pointer border border-cream px-8 py-3.5 text-xs uppercase tracking-[0.2em] text-cream transition-colors duration-300 hover:bg-cream hover:text-[#0a0a0a]"
+                  >
+                    {{ t.contact.submit }}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>

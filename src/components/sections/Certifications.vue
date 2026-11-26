@@ -31,7 +31,7 @@ onMounted(() => {
           observer?.disconnect()
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.08 }
     )
     observer.observe(el)
   }
@@ -63,52 +63,67 @@ const certs = [
 </script>
 
 <template>
-  <section id="certifications" class="px-6 sm:px-10 py-24 sm:py-36 font-hn text-cream">
-    <div :class="['editorial-rule h-0.5 w-full bg-cream mb-12 sm:mb-16', visible && 'is-visible']" />
+  <section id="certifications" class="py-20 sm:py-28 lg:py-24 font-hn text-cream">
+    <div class="editorial-shell">
+      <div :class="['editorial-rule h-0.5 w-full bg-cream mb-12 lg:mb-14', visible && 'is-visible']" />
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-10">
-      <!-- Left Index Column -->
-      <div class="lg:col-span-3">
-        <p class="text-xs uppercase tracking-[0.2em] text-cream/50 sticky top-24">
-          {{ t.certifications.index }}
-        </p>
-      </div>
-
-      <!-- Right Content Column -->
-      <div class="lg:col-span-9 space-y-14">
-        <div :class="['editorial-reveal', visible && 'is-visible']">
-          <h2 class="text-3xl sm:text-5xl font-normal leading-[1.1] tracking-[-0.02em] text-cream max-w-3xl">
-            {{ t.certifications.headline }}
-          </h2>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-12">
+        <!-- Left Index Column -->
+        <div class="lg:col-span-3 2xl:col-span-2">
+          <div class="sticky top-24 space-y-5">
+            <p class="text-xs uppercase tracking-[0.2em] text-cream/55">
+              {{ t.certifications.index }}
+            </p>
+            <p class="hidden lg:block pt-5 border-t border-cream/15 font-mono text-xs text-cream/40">
+              {{ certs.length }} {{ t.certifications.verified }}
+            </p>
+          </div>
         </div>
 
-        <div class="border-t border-cream/15">
-          <button
-            v-for="cert in certs"
-            :key="cert.title"
-            type="button"
-            @click="selectedCert = cert"
-            class="group w-full text-left cursor-pointer grid grid-cols-1 sm:grid-cols-12 gap-y-3 sm:gap-x-8 items-baseline py-8 border-b border-cream/15 transition-opacity duration-300 hover:opacity-70"
-          >
-            <div class="sm:col-span-5 flex items-baseline gap-4">
-              <span class="font-mono text-xs text-cream/40">{{ cert.index }}</span>
-              <span class="text-xl sm:text-2xl font-normal text-cream">
-                {{ cert.title }}
-              </span>
-            </div>
+        <!-- Right Content Column -->
+        <div class="lg:col-span-9 2xl:col-span-10 space-y-12">
+          <div :class="['editorial-reveal', visible && 'is-visible']">
+            <h2 class="text-3xl sm:text-5xl xl:text-[3.4rem] font-normal leading-[1.1] tracking-[-0.02em] text-cream max-w-5xl">
+              {{ t.certifications.headline }}
+            </h2>
+          </div>
 
-            <span class="sm:col-span-4 text-sm text-cream/65">
-              {{ cert.issuer }}
-            </span>
+          <div class="border-t border-cream/15">
+            <button
+              v-for="cert in certs"
+              :key="cert.title"
+              type="button"
+              @click="selectedCert = cert"
+              class="group w-full text-left cursor-pointer grid grid-cols-1 sm:grid-cols-12 gap-y-4 sm:gap-x-8 items-center py-7 border-b border-cream/15 transition-colors duration-300 hover:bg-cream/[0.025] lg:px-4 lg:-mx-4"
+            >
+              <div class="sm:col-span-5 flex items-center gap-5">
+                <span class="font-mono text-xs text-cream/40 shrink-0">{{ cert.index }}</span>
+                <div class="hidden md:block h-14 w-20 shrink-0 overflow-hidden border border-cream/15 bg-[#141414]">
+                  <img
+                    v-if="isImage(cert.file)"
+                    :src="cert.file"
+                    :alt="`${cert.title} preview`"
+                    class="h-full w-full object-cover grayscale contrast-110 transition-all duration-500 group-hover:grayscale-0 group-hover:scale-105"
+                  />
+                </div>
+                <span class="text-xl sm:text-2xl font-normal text-cream">
+                  {{ cert.title }}
+                </span>
+              </div>
 
-            <div class="sm:col-span-3 flex items-center justify-between sm:justify-end gap-5 text-xs uppercase tracking-[0.16em]">
-              <span class="text-cream/50">{{ cert.date }}</span>
-              <span class="inline-flex items-center gap-1 text-cream">
-                {{ t.certifications.inspect }}
-                <ArrowUpRight :size="14" :stroke-width="1.5" />
+              <span class="sm:col-span-4 text-sm text-cream/65">
+                {{ cert.issuer }}
               </span>
-            </div>
-          </button>
+
+              <div class="sm:col-span-3 flex items-center justify-between sm:justify-end gap-5 text-xs uppercase tracking-[0.16em]">
+                <span class="font-mono text-cream/50">{{ cert.date }}</span>
+                <span class="inline-flex items-center gap-1 text-cream border-b border-cream/35 pb-0.5 group-hover:opacity-70 transition-opacity">
+                  {{ t.certifications.inspect }}
+                  <ArrowUpRight :size="14" :stroke-width="1.5" />
+                </span>
+              </div>
+            </button>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { X } from 'lucide-vue-next'
+import { X, ArrowDown } from 'lucide-vue-next'
 import { useI18n } from '../../composables/useI18n'
 
 const { t, lang, setLang } = useI18n()
@@ -69,18 +69,18 @@ function toggleLanguage() {
 </script>
 
 <template>
-  <section id="hero" class="relative h-[100dvh] w-full overflow-hidden bg-[#0a0a0a] text-cream font-hn">
+  <section id="hero" class="relative h-[100dvh] min-h-[640px] w-full overflow-hidden bg-[#0a0a0a] text-cream font-hn">
     <!-- Layer 0: Subtle dark editorial studio tonal backdrop -->
     <div
       aria-hidden="true"
       class="anim-fade-in pointer-events-none absolute inset-0 select-none"
-      style="background: radial-gradient(ellipse 68% 72% at 50% 42%, #1d1c1a 0%, #10100f 52%, #0a0a0a 100%)"
+      style="background: radial-gradient(ellipse 68% 72% at 50% 42%, #1f1e1c 0%, #10100f 54%, #0a0a0a 100%)"
     />
 
     <!-- Layer 10: 3D Orbiting Text — BACK HALF (passes behind portrait cutout) -->
     <div
       class="anim-fade-in orbit-scene pointer-events-none absolute inset-0 z-10 flex items-center justify-center overflow-hidden select-none"
-      style="animation-delay: 500ms; --orbit-r: clamp(165px, 34vw, 360px)"
+      style="animation-delay: 500ms; --orbit-r: clamp(165px, min(31vw, 45dvh), 440px)"
       aria-hidden="true"
     >
       <div class="orbit-tilt relative -translate-y-[4vh] sm:-translate-y-[3vh]">
@@ -88,7 +88,7 @@ function toggleLanguage() {
           <span
             v-for="(item, idx) in orbitChars"
             :key="`back-${idx}`"
-            class="orbit-char font-hn font-normal text-[clamp(1.9rem,5.2vw,4.6rem)] leading-none tracking-tight text-cream/35"
+            class="orbit-char font-hn font-normal text-[clamp(1.9rem,min(4.8vw,7.4dvh),4.85rem)] leading-none tracking-tight text-cream/30"
             :style="{
               transform: `translate(-50%, -50%) rotateY(${item.angle}deg) translateZ(var(--orbit-r)) rotateY(180deg)`,
             }"
@@ -104,7 +104,7 @@ function toggleLanguage() {
       <img
         :src="PORTRAIT_IMAGE"
         alt="Portrait"
-        class="anim-rise-in h-[86dvh] sm:h-[96dvh] w-auto max-w-none object-contain object-bottom"
+        class="anim-rise-in h-[84dvh] sm:h-[90dvh] lg:h-[94dvh] w-auto max-w-none object-contain object-bottom"
         style="animation-delay: 300ms"
       />
     </div>
@@ -112,7 +112,7 @@ function toggleLanguage() {
     <!-- Layer 25: 3D Orbiting Text — FRONT HALF (sweeps in front of portrait cutout) -->
     <div
       class="anim-fade-in orbit-scene pointer-events-none absolute inset-0 z-[25] flex items-center justify-center overflow-hidden select-none"
-      style="animation-delay: 500ms; --orbit-r: clamp(165px, 34vw, 360px)"
+      style="animation-delay: 500ms; --orbit-r: clamp(165px, min(31vw, 45dvh), 440px)"
       aria-label="Syn — Origin"
     >
       <div class="orbit-tilt relative -translate-y-[4vh] sm:-translate-y-[3vh]">
@@ -120,7 +120,7 @@ function toggleLanguage() {
           <span
             v-for="(item, idx) in orbitChars"
             :key="`front-${idx}`"
-            class="orbit-char font-hn font-normal text-[clamp(1.9rem,5.2vw,4.6rem)] leading-none tracking-tight text-cream drop-shadow-[0_4px_18px_rgba(0,0,0,0.45)]"
+            class="orbit-char font-hn font-normal text-[clamp(1.9rem,min(4.8vw,7.4dvh),4.85rem)] leading-none tracking-tight text-cream drop-shadow-[0_4px_20px_rgba(0,0,0,0.5)]"
             :style="{
               transform: `translate(-50%, -50%) rotateY(${item.angle}deg) translateZ(var(--orbit-r))`,
             }"
@@ -134,111 +134,131 @@ function toggleLanguage() {
     <!-- Subtle bottom fade so cream rule & footer copy stay razor-sharp -->
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-x-0 bottom-0 z-[28] h-40 sm:h-44 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/75 to-transparent"
+      class="pointer-events-none absolute inset-x-0 bottom-0 z-[28] h-40 sm:h-48 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/80 to-transparent"
     />
 
-    <!-- Layer 30: Horizontal cream rule above footer -->
-    <div
-      class="anim-line absolute inset-x-6 sm:inset-x-10 bottom-[5.5rem] sm:bottom-28 z-30 h-0.5 bg-cream"
-      style="animation-delay: 1200ms"
-    />
+    <!-- Layer 30: Horizontal cream rule above footer (aligned with editorial-shell) -->
+    <div class="pointer-events-none absolute inset-x-0 bottom-[5.5rem] sm:bottom-[6.5rem] lg:bottom-[6.75rem] z-30">
+      <div class="editorial-shell">
+        <div class="anim-line h-0.5 w-full bg-cream" style="animation-delay: 1200ms" />
+      </div>
+    </div>
 
     <!-- Layer 30: Header chrome -->
-    <header class="absolute inset-x-0 top-0 z-30 flex items-start justify-between px-6 pt-6 sm:px-10 sm:pt-8">
-      <!-- Top-left Brand -->
-      <a
-        href="#hero"
-        @click.prevent="navigateTo('hero')"
-        class="anim-fade-up font-hn text-lg tracking-wide text-cream transition-opacity duration-300 hover:opacity-60"
-        style="animation-delay: 800ms"
-      >
-        {{ t.brand }}
-      </a>
+    <header class="absolute inset-x-0 top-0 z-30 pt-6 sm:pt-8 lg:pt-10">
+      <div class="editorial-shell flex items-start justify-between">
+        <!-- Top-left Brand -->
+        <div class="anim-fade-up flex flex-col gap-1" style="animation-delay: 800ms">
+          <a
+            href="#hero"
+            @click.prevent="navigateTo('hero')"
+            class="font-hn text-lg lg:text-xl tracking-wide text-cream transition-opacity duration-300 hover:opacity-60"
+          >
+            {{ t.brand }}
+          </a>
+          <span class="hidden lg:inline font-mono text-[11px] uppercase tracking-[0.18em] text-cream/40">
+            Portfolio · {{ t.year }}
+          </span>
+        </div>
 
-      <!-- Desktop Right Cluster -->
-      <div class="hidden sm:flex items-start gap-14 lg:gap-20 xl:gap-24">
-        <!-- Year & subtle language toggle -->
-        <div
-          class="anim-fade-up flex flex-col items-start gap-1 text-sm text-cream"
+        <!-- Desktop Right Cluster -->
+        <div class="hidden sm:flex items-start gap-12 lg:gap-16 xl:gap-24">
+          <!-- Year & subtle language toggle -->
+          <div
+            class="anim-fade-up flex flex-col items-start gap-1.5 text-sm text-cream"
+            style="animation-delay: 900ms"
+          >
+            <span class="font-mono text-xs tracking-[0.14em] text-cream/85">{{ t.year }}</span>
+            <button
+              type="button"
+              @click="toggleLanguage"
+              class="cursor-pointer font-mono text-[11px] tracking-[0.16em] uppercase text-cream/55 transition-colors duration-300 hover:text-cream"
+              :aria-label="lang === 'en' ? 'Switch to Thai' : 'Switch to English'"
+            >
+              {{ lang === 'en' ? 'EN / TH' : 'TH / EN' }}
+            </button>
+          </div>
+
+          <!-- Nav Column -->
+          <nav aria-label="Primary" class="flex flex-col gap-1 text-sm">
+            <a
+              v-for="(item, i) in navItems"
+              :key="item.id"
+              :href="`#${item.id}`"
+              @click.prevent="navigateTo(item.id)"
+              class="anim-fade-up text-cream/90 transition-all duration-300 hover:text-cream hover:translate-x-1"
+              :style="{ animationDelay: `${1000 + i * 80}ms` }"
+            >
+              {{ t.nav[item.key] }}
+            </a>
+          </nav>
+
+          <!-- Social Column -->
+          <div class="flex flex-col gap-1 text-sm">
+            <a
+              v-for="(social, i) in socialLinks"
+              :key="social.label"
+              :href="social.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="anim-fade-up text-cream/90 transition-all duration-300 hover:text-cream hover:translate-x-1"
+              :style="{ animationDelay: `${1150 + i * 80}ms` }"
+            >
+              {{ social.label }}
+            </a>
+          </div>
+        </div>
+
+        <!-- Mobile-only Hamburger -->
+        <button
+          type="button"
+          @click="menuOpen = !menuOpen"
+          class="anim-fade-up sm:hidden relative z-50 flex h-10 w-10 items-center justify-center cursor-pointer"
           style="animation-delay: 900ms"
+          :aria-expanded="menuOpen"
+          aria-label="Toggle navigation menu"
         >
-          <span>{{ t.year }}</span>
-          <button
-            type="button"
-            @click="toggleLanguage"
-            class="cursor-pointer text-xs tracking-[0.14em] uppercase text-cream/60 transition-opacity duration-300 hover:opacity-100 hover:text-cream"
-            :aria-label="lang === 'en' ? 'Switch to Thai' : 'Switch to English'"
-          >
-            {{ lang === 'en' ? 'EN / TH' : 'TH / EN' }}
-          </button>
-        </div>
-
-        <!-- Nav Column -->
-        <nav aria-label="Primary" class="flex flex-col gap-0.5 text-sm">
-          <a
-            v-for="(item, i) in navItems"
-            :key="item.id"
-            :href="`#${item.id}`"
-            @click.prevent="navigateTo(item.id)"
-            class="anim-fade-up text-cream transition-opacity duration-300 hover:opacity-60"
-            :style="{ animationDelay: `${1000 + i * 80}ms` }"
-          >
-            {{ t.nav[item.key] }}
-          </a>
-        </nav>
-
-        <!-- Social Column -->
-        <div class="flex flex-col gap-0.5 text-sm">
-          <a
-            v-for="(social, i) in socialLinks"
-            :key="social.label"
-            :href="social.href"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="anim-fade-up text-cream transition-opacity duration-300 hover:opacity-60"
-            :style="{ animationDelay: `${1150 + i * 80}ms` }"
-          >
-            {{ social.label }}
-          </a>
-        </div>
+          <span class="relative block h-4 w-6">
+            <span
+              class="absolute left-0 block h-[1.5px] w-full bg-cream transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]"
+              :class="menuOpen ? 'top-1/2 -translate-y-1/2 rotate-45' : 'top-0'"
+            />
+            <span
+              class="absolute left-0 top-1/2 block h-[1.5px] w-full -translate-y-1/2 bg-cream transition-opacity duration-300"
+              :class="menuOpen ? 'opacity-0' : 'opacity-100'"
+            />
+            <span
+              class="absolute left-0 block h-[1.5px] w-full bg-cream transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]"
+              :class="menuOpen ? 'top-1/2 -translate-y-1/2 -rotate-45' : 'bottom-0'"
+            />
+          </span>
+        </button>
       </div>
-
-      <!-- Mobile-only Hamburger -->
-      <button
-        type="button"
-        @click="menuOpen = !menuOpen"
-        class="anim-fade-up sm:hidden relative z-50 flex h-10 w-10 items-center justify-center cursor-pointer"
-        style="animation-delay: 900ms"
-        :aria-expanded="menuOpen"
-        aria-label="Toggle navigation menu"
-      >
-        <span class="relative block h-4 w-6">
-          <span
-            class="absolute left-0 block h-[1.5px] w-full bg-cream transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]"
-            :class="menuOpen ? 'top-1/2 -translate-y-1/2 rotate-45' : 'top-0'"
-          />
-          <span
-            class="absolute left-0 top-1/2 block h-[1.5px] w-full -translate-y-1/2 bg-cream transition-opacity duration-300"
-            :class="menuOpen ? 'opacity-0' : 'opacity-100'"
-          />
-          <span
-            class="absolute left-0 block h-[1.5px] w-full bg-cream transition-transform duration-500 ease-[cubic-bezier(0.76,0,0.24,1)]"
-            :class="menuOpen ? 'top-1/2 -translate-y-1/2 -rotate-45' : 'bottom-0'"
-          />
-        </span>
-      </button>
     </header>
 
     <!-- Layer 30: Footer copy -->
     <footer
-      class="absolute inset-x-0 bottom-0 z-30 flex items-end justify-between px-6 pb-5 sm:px-10 sm:pb-8 text-xs sm:text-sm leading-relaxed font-hn text-cream"
+      class="absolute inset-x-0 bottom-0 z-30 pb-5 sm:pb-7 lg:pb-8 text-xs sm:text-sm leading-relaxed font-hn text-cream"
     >
-      <div class="anim-fade-up" style="animation-delay: 1400ms">
-        <p v-for="line in t.hero.footerLeft" :key="line">{{ line }}</p>
-      </div>
+      <div class="editorial-shell flex items-end justify-between gap-6">
+        <div class="anim-fade-up" style="animation-delay: 1400ms">
+          <p v-for="line in t.hero.footerLeft" :key="line">{{ line }}</p>
+        </div>
 
-      <div class="anim-fade-up text-right" style="animation-delay: 1550ms">
-        <p v-for="line in t.hero.footerRight" :key="line">{{ line }}</p>
+        <!-- Subtle desktop center scroll cue -->
+        <button
+          type="button"
+          @click="navigateTo('about')"
+          class="anim-fade-up hidden lg:inline-flex items-center gap-2 cursor-pointer font-mono text-[11px] uppercase tracking-[0.22em] text-cream/50 transition-colors duration-300 hover:text-cream pb-1"
+          style="animation-delay: 1480ms"
+        >
+          <span>Scroll</span>
+          <ArrowDown :size="13" :stroke-width="1.5" />
+        </button>
+
+        <div class="anim-fade-up text-right" style="animation-delay: 1550ms">
+          <p v-for="line in t.hero.footerRight" :key="line">{{ line }}</p>
+        </div>
       </div>
     </footer>
 

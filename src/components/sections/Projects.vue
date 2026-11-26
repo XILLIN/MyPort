@@ -2,6 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { ArrowUpRight } from 'lucide-vue-next'
 import { useI18n } from '../../composables/useI18n'
+import GithubCommitHistory from '../GithubCommitHistory.vue'
 
 const { t, isTh } = useI18n()
 
@@ -20,7 +21,7 @@ onMounted(() => {
         observer?.disconnect()
       }
     },
-    { threshold: 0.04 }
+    { threshold: 0.03 }
   )
   observer.observe(el)
 })
@@ -28,13 +29,6 @@ onMounted(() => {
 onUnmounted(() => {
   observer?.disconnect()
 })
-
-const categories = computed(() => [
-  { key: 'ALL', label: isTh.value ? 'ทั้งหมด' : 'All' },
-  { key: 'SYN', label: 'Syn Suite (RERUN)' },
-  { key: 'FIVEM', label: 'FiveM Standalone' },
-  { key: 'WEB', label: isTh.value ? 'เว็บและเดสก์ท็อป' : 'Web & Desktop' },
-])
 
 const projects = computed(() => [
   {
@@ -50,7 +44,7 @@ const projects = computed(() => [
     desc: isTh.value
       ? 'โครงสร้าง Resource ครบวงจรสำหรับเซิร์ฟเวอร์ RERUN COMMU2 พัฒนาร่วมกันโดย PZ × XL (Syn DEV) บน ESX Legacy (Game Build 3095) ขับเคลื่อนด้วยระบบฝั่งเซิร์ฟเวอร์ ความปลอดภัย คอมแบต และ UI ตระกูล syn_* กว่า 19 สคริปต์'
       : 'Complete modular ESX Legacy (Game Build 3095) server architecture powering RERUN COMMU2, co-developed by PZ × XL (Syn DEV) and driven by 19 custom syn_* security, combat, world, phone, and UI resources.',
-    stack: 'Lua 5.4 · Svelte 5 · Vue · TypeScript · ESX Legacy · oxmysql · ox_lib',
+    stack: ['Lua 5.4', 'Svelte 5', 'Vue', 'TypeScript', 'ESX Legacy', 'oxmysql', 'ox_lib'],
     highlights: isTh.value
       ? [
           'แยกหมวดหมู่โมดูลชัดเจน ([RRC_StartUp], [Syntex_System], [Syntax_Combat], [Syntax_Phone])',
@@ -81,7 +75,7 @@ const projects = computed(() => [
     desc: isTh.value
       ? 'ระบบป้องกันการโกงสไตล์ FiveGuard / Electron ที่ทำงานแบบ Server-Authoritative พร้อมระบบจัดเก็บแบน หลักฐาน และ SAC Gatekeeper ทำงานคู่กับ syn_watcher ที่ตรวจสอบฝั่งไคลเอนต์ด้วย Web Worker แบบกินทรัพยากรต่ำสุด'
       : 'FiveGuard & Electron-style server-authoritative anti-cheat, ban store, evidence logger, and SAC backend gatekeeper paired with syn_watcher — an ultra-thin (0.00–0.01ms) companion client auditor and anti-stop heartbeat.',
-    stack: 'Lua 5.4 · OneSync · JavaScript · Web Worker · FiveM NUI',
+    stack: ['Lua 5.4', 'OneSync', 'JavaScript', 'Web Worker', 'FiveM NUI'],
     highlights: isTh.value
       ? [
           'syn_guard ทำหน้าที่เป็น syn-gatekeeper จัดการระบบแบน หลักฐาน และตรวจสอบสิทธิ์ฝั่งเซิร์ฟเวอร์',
@@ -112,7 +106,7 @@ const projects = computed(() => [
     desc: isTh.value
       ? 'ระบบจัดการดาเมจอาวุธสำหรับ FiveM OneSync ที่แทนที่ตัวคูณดั้งเดิมของ GTA V ด้วยค่าดาเมจคงที่ฝั่งเซิร์ฟเวอร์ พร้อมระบบเกราะรับดาเมจก่อนเลือด คริติคอลยิงหัว และระบบตรวจจับความผิดปกติที่ Resmon 0.00ms'
       : 'OneSync weapon damage engine replacing GTA V native multipliers with server-authoritative flat hit values, armor-first absorption, configurable headshot criticals, rapid-fire anti-leak, and anomaly logging at 0.00ms resmon.',
-    stack: 'Lua 5.4 · OneSync · Anomaly Detection · FiveM',
+    stack: ['Lua 5.4', 'OneSync', 'Anomaly Detection', 'FiveM'],
     highlights: isTh.value
       ? [
           'Authoritative Flat Damage กำหนดเลือดที่ลดต่อฮิตชัดเจน ไม่ขึ้นกับตัวคูณเดิมของเกม',
@@ -143,7 +137,7 @@ const projects = computed(() => [
     desc: isTh.value
       ? 'นำต้นฉบับ oph3z-phone มาเขียนใหม่ทั้งหมดด้วย Svelte 5 พร้อมออกแบบ UI/UX ใหม่ในสไตล์ Dark Premium Neumorphic รองรับทั้ง Dark และ Matte Platinum Light Mode ระบบเสียง กล้อง แอป และภาษาไทยสมบูรณ์'
       : 'Full Svelte 5 rewrite of oph3z-phone supporting ESX, QBCore, and Qbox — featuring monochromatic Dark & Matte Platinum design tokens, camera, messaging, calling, widgets, spatial audio (xsound), and complete Thai localization.',
-    stack: 'Svelte 5 · Lua 5.4 · TypeScript · CSS · xsound · mumble-voip',
+    stack: ['Svelte 5', 'Lua 5.4', 'TypeScript', 'CSS', 'xsound', 'mumble-voip'],
     highlights: isTh.value
       ? [
           'เขียน Frontend ใหม่ทั้งหมดด้วย Svelte 5 เพื่อความลื่นไหลและลดการใช้หน่วยความจำใน NUI',
@@ -174,7 +168,7 @@ const projects = computed(() => [
     desc: isTh.value
       ? 'ชุดโครงสร้างพื้นฐานที่ทำงานประสานกันสำหรับโหมดการเล่นแยกโลกใน RERUN: สลับ 13 โลกด้วย Routing Buckets (syn_world_core), แยกสถานะเลือด/เกราะไม่ให้ข้อมูลเมืองหลักเสียหาย (syn_healthstate), วาปปลอดภัย (syn_teleport) และระบบโซนต่อสู้ syn_pz_warzone'
       : 'Interconnected infrastructure powering instanced gameplay in RERUN: 13-world Routing Bucket manager (syn_world_core), isolated arena Health/Armor persistence (syn_healthstate), anti-cheat whitelisted safe warps (syn_teleport), and PZ × Syn Warzone v2.0.',
-    stack: 'Lua 5.4 · ox_lib · Routing Buckets · FiveM NUI',
+    stack: ['Lua 5.4', 'ox_lib', 'Routing Buckets', 'FiveM NUI'],
     highlights: isTh.value
       ? [
           'syn_world_core: จัดการ 13 โลก (default, farmworld0–5, warzone0–5) พร้อม Fade, Ghost-Freeze ตอนโหลดแมพ และคำสั่ง ACE',
@@ -205,7 +199,7 @@ const projects = computed(() => [
     desc: isTh.value
       ? 'ระบบจัดการคิวและการเชื่อมต่อแบบ Event-driven สำหรับ FiveM ออกแบบรอบวงจรการเชื่อมต่อ 11 ขั้นตอน พร้อมระบบปล่อยผู้เล่นแบบปรับตัว คะแนนลำดับความสำคัญ และการป้องกันภาระโหลดของ FXServer'
       : 'Next-generation event-driven queue and connection manager for high-concurrency FiveM servers, built around an 11-stage session lifecycle with adaptive staged player release and pressure protection.',
-    stack: 'Lua 5.4 · FiveM · oxmysql · Vue · Tailwind CSS',
+    stack: ['Lua 5.4', 'FiveM', 'oxmysql', 'Vue', 'Tailwind CSS'],
     highlights: isTh.value
       ? [
           'วงจรการเชื่อมต่อ 11 ขั้นตอนตั้งแต่ WAITING จนถึง CHARACTER_LOAD และ READY',
@@ -236,7 +230,7 @@ const projects = computed(() => [
     desc: isTh.value
       ? 'มินิเกมจังหวะดนตรี 4 เลนบน FiveM NUI ที่ใช้เอนจิน HTML5 Canvas ระดับ 60+ FPS แยกการทำงานอิสระจาก Lua พร้อมระบบเสียง Multi-track Stem และระบบตรวจสอบคะแนนฝั่งเซิร์ฟเวอร์'
       : 'High-performance 4-lane rhythm minigame for FiveM powered by a standalone 60+ FPS HTML5 Canvas engine, Web Audio API dynamic stem playback, and server-side score verification.',
-    stack: 'JavaScript · Lua · HTML5 Canvas · Web Audio API · FiveM NUI',
+    stack: ['JavaScript', 'Lua', 'HTML5 Canvas', 'Web Audio API', 'FiveM NUI'],
     highlights: isTh.value
       ? [
           'ลูปการเล่นรันใน CEF Canvas เต็มรูปแบบที่ 60+ FPS โดยไม่มีภาระสื่อสารกับ Lua ทุกเฟรม',
@@ -267,7 +261,7 @@ const projects = computed(() => [
     desc: isTh.value
       ? 'ระบบเว็บไซต์และจองโต๊ะร้านอาหารแบบ Full-Stack รองรับภาษาไทยและอังกฤษ พัฒนาส่วนยืนยันตัวตนด้วย Better Auth, โฟลว์จองโต๊ะ 4 ขั้นตอน, API และหน้าแดชบอร์ดวิเคราะห์ข้อมูลสำหรับแอดมิน'
       : 'Bilingual (TH/EN) restaurant website and reservation system built with Next.js App Router, TypeScript, MongoDB/Mongoose, Better Auth, and next-intl — featuring member booking flows and admin analytics.',
-    stack: 'Next.js · TypeScript · React · MongoDB · Mongoose · Better Auth · Tailwind CSS',
+    stack: ['Next.js', 'TypeScript', 'React', 'MongoDB', 'Mongoose', 'Better Auth', 'Tailwind CSS'],
     highlights: isTh.value
       ? [
           'ระบบยืนยันตัวตนด้วย Better Auth + MongoDB เก็บ Session ผ่าน HttpOnly cookie พร้อมตรวจสิทธิ์ฝั่งเซิร์ฟเวอร์',
@@ -298,7 +292,7 @@ const projects = computed(() => [
     desc: isTh.value
       ? 'แอปพลิเคชันเดสก์ท็อป Python (CustomTkinter) สำหรับอ่านไฟล์ .mid และจำลองการกดคีย์บอร์ดเล่นเปียโนในเกมแบบเรียลไทม์ พร้อมตัวแสดงข้อมูลเพลง ปรับคีย์ ปรับความเร็ว และปุ่มหยุดฉุกเฉิน'
       : 'Python desktop application (CustomTkinter) that parses .mid files and automates real-time keyboard playback for 22-key + half-key in-game pianos with live tempo, transpose, and failsafe controls.',
-    stack: 'Python · CustomTkinter · mido · pydirectinput',
+    stack: ['Python', 'CustomTkinter', 'mido', 'pydirectinput'],
     highlights: isTh.value
       ? [
           'อ่านและแสดงข้อมูล MIDI อัตโนมัติ: ช่วงคีย์, ค่า BPM จริง, Time Signature และจำนวนโน้ตทั้งหมด',
@@ -315,6 +309,25 @@ const projects = computed(() => [
     github: '',
     live: 'https://youtu.be/pxXGbV-Qmos',
     liveLabel: isTh.value ? 'ดูวิดีโอตัวอย่าง' : 'Video Preview',
+  },
+])
+
+const categories = computed(() => [
+  { key: 'ALL', label: isTh.value ? 'ทั้งหมด' : 'All', count: projects.value.length },
+  {
+    key: 'SYN',
+    label: 'Syn Suite (RERUN)',
+    count: projects.value.filter((p) => p.category === 'SYN').length,
+  },
+  {
+    key: 'FIVEM',
+    label: 'FiveM Standalone',
+    count: projects.value.filter((p) => p.category === 'FIVEM').length,
+  },
+  {
+    key: 'WEB',
+    label: isTh.value ? 'เว็บและเดสก์ท็อป' : 'Web & Desktop',
+    count: projects.value.filter((p) => p.category === 'WEB').length,
   },
 ])
 
@@ -420,182 +433,245 @@ const synScripts = computed(() => [
     role: isTh.value ? 'Syntax WeatherControlCenter ควบคุมสภาพอากาศซิงก์ทั้งเซิร์ฟเวอร์' : 'Syntax WeatherControlCenter server-synced weather controller',
   },
 ])
+
+function jumpTo(id) {
+  const el = document.getElementById(id)
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+}
 </script>
 
 <template>
-  <section id="projects" class="px-6 sm:px-10 py-24 sm:py-36 font-hn text-cream">
-    <div :class="['editorial-rule h-0.5 w-full bg-cream mb-12 sm:mb-16', visible && 'is-visible']" />
+  <section id="projects" class="py-20 sm:py-28 lg:py-28 font-hn text-cream">
+    <div class="editorial-shell">
+      <div :class="['editorial-rule h-0.5 w-full bg-cream mb-12 lg:mb-14', visible && 'is-visible']" />
 
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-10">
-      <!-- Left Index Column -->
-      <div class="lg:col-span-3">
-        <p class="text-xs uppercase tracking-[0.2em] text-cream/50 sticky top-24">
-          {{ t.projects.index }}
-        </p>
-      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-12">
+        <!-- Left Index Column -->
+        <div class="lg:col-span-3 2xl:col-span-2">
+          <div class="sticky top-24 space-y-6">
+            <p class="text-xs uppercase tracking-[0.2em] text-cream/55">
+              {{ t.projects.index }}
+            </p>
 
-      <!-- Right Content Column -->
-      <div class="lg:col-span-9 space-y-14 sm:space-y-20">
-        <div :class="['editorial-reveal space-y-8', visible && 'is-visible']">
-          <h2 class="text-3xl sm:text-5xl font-normal leading-[1.1] tracking-[-0.02em] text-cream max-w-3xl">
-            {{ t.projects.headline }}
-          </h2>
-
-          <!-- Editorial Category Filter -->
-          <div class="flex flex-wrap items-center gap-6 text-xs uppercase tracking-[0.18em]">
-            <button
-              v-for="cat in categories"
-              :key="cat.key"
-              type="button"
-              @click="activeCategory = cat.key"
-              class="cursor-pointer pb-1 transition-all duration-300 border-b"
-              :class="
-                activeCategory === cat.key
-                  ? 'text-cream border-cream'
-                  : 'text-cream/45 border-transparent hover:text-cream/80'
-              "
-            >
-              {{ cat.label }}
-            </button>
+            <div class="hidden lg:flex flex-col gap-2.5 pt-5 border-t border-cream/15 text-xs">
+              <button
+                type="button"
+                @click="jumpTo('projects-list')"
+                class="text-left cursor-pointer font-mono text-cream/55 hover:text-cream transition-colors"
+              >
+                01 · {{ isTh ? 'ผลงานหลัก' : 'Flagship Systems' }} ({{ projects.length }})
+              </button>
+              <button
+                type="button"
+                @click="jumpTo('syn-index')"
+                class="text-left cursor-pointer font-mono text-cream/55 hover:text-cream transition-colors"
+              >
+                02 · syn_* Index ({{ synScripts.length }})
+              </button>
+              <button
+                type="button"
+                @click="jumpTo('github-commits')"
+                class="text-left cursor-pointer font-mono text-cream/55 hover:text-cream transition-colors"
+              >
+                03 · {{ isTh ? 'ประวัติ GitHub Commits' : 'GitHub Commit Log' }}
+              </button>
+            </div>
           </div>
         </div>
 
-        <!-- Flagship Projects List -->
-        <div class="border-t border-cream/15">
-          <article
-            v-for="(project, i) in filteredProjects"
-            :key="project.title"
-            :class="['editorial-reveal py-12 sm:py-16 border-b border-cream/15', visible && 'is-visible']"
-            :style="{ transitionDelay: `${Math.min(i, 4) * 70}ms` }"
-          >
-            <!-- Top Row: Number, Large Title, Year/Status -->
-            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-8">
-              <div class="flex items-baseline gap-5">
-                <span class="font-mono text-xs text-cream/40">{{ project.index }}</span>
-                <div>
-                  <h3 class="text-2xl sm:text-4xl lg:text-5xl font-normal tracking-[-0.02em] text-cream">
-                    {{ project.title }}
-                  </h3>
-                  <p class="mt-2 text-sm text-cream/60">
-                    {{ project.subtitle }}
-                  </p>
+        <!-- Right Content Column -->
+        <div class="lg:col-span-9 2xl:col-span-10 space-y-14 lg:space-y-16">
+          <div :class="['editorial-reveal space-y-7', visible && 'is-visible']">
+            <h2 class="text-3xl sm:text-5xl xl:text-[3.4rem] font-normal leading-[1.1] tracking-[-0.02em] text-cream max-w-5xl">
+              {{ t.projects.headline }}
+            </h2>
+
+            <!-- Editorial Category Filter -->
+            <div class="flex flex-wrap items-center justify-between gap-4 pt-1">
+              <div class="flex flex-wrap items-center gap-6 text-xs uppercase tracking-[0.18em]">
+                <button
+                  v-for="cat in categories"
+                  :key="cat.key"
+                  type="button"
+                  @click="activeCategory = cat.key"
+                  class="cursor-pointer pb-1.5 transition-all duration-300 border-b inline-flex items-baseline gap-2"
+                  :class="
+                    activeCategory === cat.key
+                      ? 'text-cream border-cream'
+                      : 'text-cream/45 border-transparent hover:text-cream/80'
+                  "
+                >
+                  <span>{{ cat.label }}</span>
+                  <span class="font-mono text-[10px] text-cream/40">{{ cat.count }}</span>
+                </button>
+              </div>
+
+              <button
+                type="button"
+                @click="jumpTo('github-commits')"
+                class="hidden sm:inline-flex items-center gap-1.5 cursor-pointer font-mono text-[11px] uppercase tracking-[0.16em] text-cream/55 hover:text-cream transition-colors"
+              >
+                <span>{{ isTh ? 'ข้ามไปดู GitHub Commits' : 'Jump to GitHub Commits' }}</span>
+                <ArrowUpRight :size="13" :stroke-width="1.5" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Flagship Projects List -->
+          <div id="projects-list" class="border-t border-cream/15">
+            <article
+              v-for="(project, i) in filteredProjects"
+              :key="project.title"
+              :class="[
+                'editorial-reveal py-9 lg:py-11 border-b border-cream/15 transition-colors duration-200 hover:bg-cream/[0.02] lg:px-4 lg:-mx-4',
+                visible && 'is-visible',
+              ]"
+              :style="{ transitionDelay: `${Math.min(i, 4) * 60}ms` }"
+            >
+              <!-- Top Row: Number, Large Title, Year/Status -->
+              <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-6">
+                <div class="flex items-baseline gap-4 lg:gap-5">
+                  <span class="font-mono text-xs text-cream/40 shrink-0">{{ project.index }}</span>
+                  <div>
+                    <h3 class="text-2xl sm:text-3xl lg:text-[2.35rem] font-normal tracking-[-0.02em] text-cream leading-tight">
+                      {{ project.title }}
+                    </h3>
+                    <p class="mt-1.5 text-sm text-cream/60">
+                      {{ project.subtitle }}
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-cream/50 sm:text-right shrink-0">
+                  <span>{{ project.year }}</span>
+                  <span class="text-cream/25">/</span>
+                  <span class="text-cream/85 border border-cream/20 px-2 py-0.5">{{ project.status }}</span>
                 </div>
               </div>
 
-              <div class="flex items-center gap-4 text-xs uppercase tracking-[0.16em] text-cream/50 sm:text-right shrink-0">
-                <span>{{ project.year }}</span>
-                <span>&mdash;</span>
-                <span class="text-cream/85">{{ project.status }}</span>
+              <!-- Body Grid -->
+              <div class="grid grid-cols-1 md:grid-cols-12 gap-y-6 md:gap-x-8 pl-0 sm:pl-9">
+                <div class="md:col-span-5 space-y-5">
+                  <p class="text-sm sm:text-[15px] leading-relaxed text-cream/75">
+                    {{ project.desc }}
+                  </p>
+
+                  <div class="pt-4 border-t border-cream/15 space-y-2.5">
+                    <p class="text-[11px] uppercase tracking-[0.2em] text-cream/45">
+                      {{ t.projects.stackLabel }}
+                    </p>
+                    <div class="flex flex-wrap gap-1.5">
+                      <span
+                        v-for="tech in project.stack"
+                        :key="tech"
+                        class="font-mono text-[11px] text-cream/70 border border-cream/15 px-2 py-0.5"
+                      >
+                        {{ tech }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <!-- Links or Clean Visibility Status -->
+                  <div class="pt-1 flex flex-wrap items-center gap-5 text-sm">
+                    <a
+                      v-if="project.github"
+                      :href="project.github"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1.5 text-cream border-b border-cream/40 pb-0.5 transition-opacity duration-300 hover:opacity-60"
+                    >
+                      <span>{{ t.projects.sourceCode }}</span>
+                      <ArrowUpRight :size="15" :stroke-width="1.5" />
+                    </a>
+                    <a
+                      v-if="project.live"
+                      :href="project.live"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="inline-flex items-center gap-1.5 text-cream border-b border-cream/40 pb-0.5 transition-opacity duration-300 hover:opacity-60"
+                    >
+                      <span>{{ project.liveLabel || t.projects.liveDemo }}</span>
+                      <ArrowUpRight :size="15" :stroke-width="1.5" />
+                    </a>
+                    <span
+                      v-if="project.visibility === 'private'"
+                      class="font-mono text-[11px] uppercase tracking-[0.16em] text-cream/45"
+                    >
+                      &mdash; {{ t.projects.privateRepo }}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="md:col-span-7 md:border-l md:border-cream/10 md:pl-8">
+                  <p class="text-[11px] uppercase tracking-[0.2em] text-cream/45 mb-3.5">
+                    {{ t.projects.highlightsLabel }}
+                  </p>
+                  <ul class="grid grid-cols-1 xl:grid-cols-2 gap-x-6 gap-y-2.5 text-sm leading-relaxed text-cream/70">
+                    <li
+                      v-for="item in project.highlights"
+                      :key="item"
+                      class="flex items-baseline gap-2.5"
+                    >
+                      <span class="text-cream/35 select-none shrink-0">&mdash;</span>
+                      <span>{{ item }}</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
+            </article>
+          </div>
+
+          <!-- Complete syn_* Script Index inside RERUN COMMU2 (2-Column Grid on Desktop) -->
+          <div
+            v-if="activeCategory === 'ALL' || activeCategory === 'SYN'"
+            id="syn-index"
+            :class="['editorial-reveal pt-4 space-y-6', visible && 'is-visible']"
+          >
+            <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
+              <div>
+                <p class="text-xs uppercase tracking-[0.2em] text-cream/50">
+                  {{ isTh ? 'สารบัญสคริปต์ภายใน RERUN COMMU2' : 'RERUN COMMU2 — Complete syn_* Resource Index' }}
+                </p>
+                <p class="text-sm text-cream/65 mt-1.5">
+                  {{ isTh
+                    ? 'สคริปต์ตระกูล syn_* ทั้งหมด 19 โมดูลที่พัฒนาและดูแลภายใน reruncommu-resources'
+                    : 'All 19 custom syn_* modules authored and maintained inside reruncommu-resources.'
+                  }}
+                </p>
+              </div>
+              <span class="font-mono text-xs text-cream/45 shrink-0">
+                {{ synScripts.length }} modules
+              </span>
             </div>
 
-            <!-- Body Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-y-8 md:gap-x-8 pl-0 sm:pl-10">
-              <div class="md:col-span-5 space-y-6">
-                <p class="text-sm sm:text-base leading-relaxed text-cream/75">
-                  {{ project.desc }}
-                </p>
-
-                <div class="pt-4 border-t border-cream/15 space-y-1.5">
-                  <p class="text-[11px] uppercase tracking-[0.2em] text-cream/45">
-                    {{ t.projects.stackLabel }}
-                  </p>
-                  <p class="text-sm text-cream/85">
-                    {{ project.stack }}
-                  </p>
-                </div>
-
-                <!-- Links or Clean Visibility Status -->
-                <div class="pt-2 flex flex-wrap items-center gap-6 text-sm">
-                  <a
-                    v-if="project.github"
-                    :href="project.github"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center gap-1.5 text-cream border-b border-cream/40 pb-0.5 transition-opacity duration-300 hover:opacity-60"
-                  >
-                    <span>{{ t.projects.sourceCode }}</span>
-                    <ArrowUpRight :size="15" :stroke-width="1.5" />
-                  </a>
-                  <a
-                    v-if="project.live"
-                    :href="project.live"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="inline-flex items-center gap-1.5 text-cream border-b border-cream/40 pb-0.5 transition-opacity duration-300 hover:opacity-60"
-                  >
-                    <span>{{ project.liveLabel || t.projects.liveDemo }}</span>
-                    <ArrowUpRight :size="15" :stroke-width="1.5" />
-                  </a>
-                  <span
-                    v-if="project.visibility === 'private'"
-                    class="text-xs uppercase tracking-[0.18em] text-cream/45"
-                  >
-                    &mdash; {{ t.projects.privateRepo }}
+            <div class="grid grid-cols-1 xl:grid-cols-2 border-t border-l border-cream/15">
+              <div
+                v-for="(script, idx) in synScripts"
+                :key="script.name"
+                class="p-4 sm:px-5 border-r border-b border-cream/15 space-y-1.5 transition-colors duration-200 hover:bg-cream/[0.025]"
+              >
+                <div class="flex items-baseline justify-between gap-3">
+                  <div class="flex items-baseline gap-2.5 min-w-0">
+                    <span class="font-mono text-[11px] text-cream/35 shrink-0">{{ String(idx + 1).padStart(2, '0') }}</span>
+                    <span class="font-mono text-sm text-cream truncate">{{ script.name }}</span>
+                  </div>
+                  <span class="font-mono text-[11px] text-cream/45 shrink-0">
+                    {{ script.group }}
                   </span>
                 </div>
-              </div>
 
-              <div class="md:col-span-7">
-                <p class="text-[11px] uppercase tracking-[0.2em] text-cream/45 mb-4">
-                  {{ t.projects.highlightsLabel }}
+                <p class="text-xs sm:text-[13px] text-cream/70 leading-relaxed pl-6">
+                  {{ script.role }}
                 </p>
-                <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-2.5 text-sm leading-relaxed text-cream/70">
-                  <li
-                    v-for="item in project.highlights"
-                    :key="item"
-                    class="flex items-baseline gap-2.5"
-                  >
-                    <span class="text-cream/35 select-none">&mdash;</span>
-                    <span>{{ item }}</span>
-                  </li>
-                </ul>
               </div>
             </div>
-          </article>
-        </div>
-
-        <!-- Complete syn_* Script Index inside RERUN COMMU2 -->
-        <div
-          v-if="activeCategory === 'ALL' || activeCategory === 'SYN'"
-          :class="['editorial-reveal pt-8 space-y-8', visible && 'is-visible']"
-        >
-          <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-            <div>
-              <p class="text-xs uppercase tracking-[0.2em] text-cream/50">
-                {{ isTh ? 'สารบัญสคริปต์ภายใน RERUN COMMU2' : 'RERUN COMMU2 — Complete syn_* Resource Index' }}
-              </p>
-              <p class="text-sm text-cream/65 mt-2">
-                {{ isTh
-                  ? 'สคริปต์ตระกูล syn_* ทั้งหมด 19 โมดูลที่พัฒนาและดูแลภายใน reruncommu-resources'
-                  : 'All 19 custom syn_* modules authored and maintained inside reruncommu-resources.'
-                }}
-              </p>
-            </div>
-            <span class="font-mono text-xs text-cream/45 shrink-0">
-              {{ synScripts.length }} modules
-            </span>
           </div>
 
-          <div class="border-t border-cream/15">
-            <div
-              v-for="(script, idx) in synScripts"
-              :key="script.name"
-              class="grid grid-cols-1 sm:grid-cols-12 gap-y-1 sm:gap-x-6 py-4 border-b border-cream/15 items-baseline"
-            >
-              <div class="sm:col-span-4 flex items-baseline gap-3">
-                <span class="font-mono text-[11px] text-cream/35">{{ String(idx + 1).padStart(2, '0') }}</span>
-                <span class="font-mono text-sm text-cream">{{ script.name }}</span>
-              </div>
-
-              <span class="sm:col-span-3 font-mono text-xs text-cream/45">
-                {{ script.group }}
-              </span>
-
-              <p class="sm:col-span-5 text-sm text-cream/75 leading-relaxed">
-                {{ script.role }}
-              </p>
-            </div>
+          <!-- GitHub Commit History Across Repositories -->
+          <div :class="['editorial-reveal', visible && 'is-visible']" style="transition-delay: 140ms">
+            <GithubCommitHistory />
           </div>
         </div>
       </div>

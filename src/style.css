@@ -38,7 +38,8 @@ html[lang="th"] .font-hn {
 
 /* Custom subtle editorial scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: #0a0a0a;
@@ -48,6 +49,34 @@ html[lang="th"] .font-hn {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(239, 238, 233, 0.45);
+}
+
+/* Full-width editorial shell with crisp responsive edge gutters */
+.editorial-shell {
+  width: 100%;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .editorial-shell {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .editorial-shell {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .editorial-shell {
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+  }
 }
 
 /* ═══════════════════════════════════════════
