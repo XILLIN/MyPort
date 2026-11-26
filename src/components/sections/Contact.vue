@@ -1,136 +1,230 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import Terminal from '../Terminal.vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { ArrowUpRight, Check, Copy } from 'lucide-vue-next'
 import { useI18n } from '../../composables/useI18n'
 
-const { t, isTh } = useI18n()
+const { t } = useI18n()
 
 const visible = ref(false)
-const sent    = ref(false)
-const form    = ref({ name: '', email: '', msg: '' })
+const sent = ref(false)
+const copied = ref(false)
+const form = ref({ name: '', email: '', message: '' })
+
+let observer
+let copyTimer
 
 onMounted(() => {
   const el = document.getElementById('contact')
-  const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) visible.value = true }, { threshold: 0.2 })
-  if (el) obs.observe(el)
+  if (!el) return
+
+  observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        visible.value = true
+        observer?.disconnect()
+      }
+    },
+    { threshold: 0.08 }
+  )
+  observer.observe(el)
 })
 
-function submit() {
-  sent.value = true
-  form.value = { name: '', email: '', msg: '' }
-  setTimeout(() => { sent.value = false }, 5000)
+onUnmounted(() => {
+  observer?.disconnect()
+  clearTimeout(copyTimer)
+})
+
+const channels = [
+  { label: 'Email', value: 'inter2546@gmail.com', href: 'mailto:inter2546@gmail.com' },
+  { label: 'GitHub', value: 'github.com/XILLIN', href: 'https://github.com/XILLIN' },
+  { label: 'Discord', value: 'lixxert', href: 'https://discord.gg/hweauyFCYN' },
+  { label: 'Facebook', value: 'fb.com/profileinter', href: 'https://www.facebook.com/profileinter' },
+]
+
+async function copyEmail() {
+  try {
+    await navigator.clipboard.writeText('inter2546@gmail.com')
+    copied.value = true
+    clearTimeout(copyTimer)
+    copyTimer = setTimeout(() => {
+      copied.value = false
+    }, 2500)
+  } catch {
+    // Fallback ignored cleanly
+  }
 }
 
-const links = [
-  { icon: '📧', label: 'Email',    value: 'inter2546@gmail.com',       href: 'mailto:inter2546@gmail.com', color: '#00F5A0' },
-  { icon: '🐙', label: 'GitHub',   value: 'github.com/XILLIN', href: 'https://github.com/XILLIN', color: '#FF7A18' },
-  { icon: '🎮', label: 'Discord',  value: 'lixxert',       href: 'https://discord.gg/hweauyFCYN', color: '#7C3AED' },
-  { icon: '📘', label: 'Facebook', value: 'fb.com/profileinter',     href: 'https://www.facebook.com/profileinter', color: '#00F5A0' },
-]
+function submitForm() {
+  sent.value = true
+  form.value = { name: '', email: '', message: '' }
+}
+
+function resetForm() {
+  sent.value = false
+}
 </script>
 
 <template>
-  <section id="contact" class="px-6 lg:px-16 py-20 pb-32">
-    <div :class="['reveal', visible && 'visible']" class="mb-12">
-      <p class="font-pixel text-[9px] text-secondary tracking-widest mb-3">{{ t.contact.cmd }}</p>
-      <h2 class="font-pixel text-xl sm:text-2xl text-text mb-1">{{ t.contact.title }}</h2>
-      <div class="h-px w-24 bg-gradient-to-r from-primary to-transparent mt-3" />
-    </div>
+  <section id="contact" class="px-6 sm:px-10 py-24 sm:py-36 font-hn text-cream">
+    <div :class="['editorial-rule h-0.5 w-full bg-cream mb-12 sm:mb-16', visible && 'is-visible']" />
 
-    <div class="grid lg:grid-cols-2 gap-10 max-w-4xl">
-      <!-- Contact links -->
-      <div :class="['reveal', visible && 'visible']">
-        <Terminal title="contact.sh">
-          <div class="space-y-4">
-            <p class="font-mono text-xs text-muted mb-6">
-              <span class="text-secondary">$</span> {{ isTh ? 'พร้อมร่วมงานหรือพูดคุย ติดต่อได้ทางช่องทางเหล่านี้ครับ' : 'Ready to collaborate? Hit me up on any of these channels.' }}
-            </p>
-            <a
-              v-for="link in links" :key="link.label"
-              :href="link.href"
-              class="flex items-center gap-4 p-3 border transition-all duration-200 group block"
-              :style="`border-color:${link.color}15`"
-              @mouseenter="e => e.currentTarget.style.borderColor = link.color + '40'"
-              @mouseleave="e => e.currentTarget.style.borderColor = link.color + '15'"
-            >
-              <div
-                class="w-10 h-10 flex items-center justify-center text-xl border flex-shrink-0"
-                :style="`border-color:${link.color}30;background:${link.color}08`"
-              >
-                {{ link.icon }}
-              </div>
-              <div class="min-w-0">
-                <div class="font-pixel text-[9px] mb-0.5" :style="`color:${link.color}`">{{ link.label }}</div>
-                <div class="font-mono text-xs text-muted truncate">{{ link.value }}</div>
-              </div>
-              <span class="ml-auto font-pixel text-[9px] text-muted group-hover:text-primary transition-colors">↗</span>
-            </a>
-          </div>
-        </Terminal>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-10">
+      <!-- Left Index Column -->
+      <div class="lg:col-span-3">
+        <p class="text-xs uppercase tracking-[0.2em] text-cream/50 sticky top-24">
+          {{ t.contact.index }}
+        </p>
       </div>
 
-      <!-- Message form -->
-      <div :class="['reveal', visible && 'visible']" style="transition-delay:0.15s">
-        <Terminal title="send_message.sh">
-          <transition name="fade" mode="out-in">
-            <div v-if="sent" key="sent" class="py-8 text-center">
-              <div class="text-4xl mb-4">✅</div>
-              <p class="font-pixel text-[10px] text-primary text-glow-green mb-2">{{ isTh ? 'ส่งข้อความเรียบร้อย' : 'MESSAGE_SENT' }}</p>
-              <p class="font-mono text-xs text-muted">{{ isTh ? 'ผมจะติดต่อกลับโดยเร็วที่สุด' : "I'll get back to you soon." }}<span class="blink text-primary">_</span></p>
+      <!-- Right Content Column -->
+      <div class="lg:col-span-9 space-y-16 sm:space-y-24">
+        <div :class="['editorial-reveal space-y-8', visible && 'is-visible']">
+          <h2 class="text-3xl sm:text-5xl font-normal leading-[1.1] tracking-[-0.02em] text-cream max-w-3xl">
+            {{ t.contact.headline }}
+          </h2>
+
+          <div class="flex flex-wrap items-baseline gap-x-8 gap-y-3">
+            <a
+              href="mailto:inter2546@gmail.com"
+              class="text-2xl sm:text-4xl font-normal tracking-[-0.01em] text-cream border-b border-cream/35 pb-1 transition-opacity duration-300 hover:opacity-60"
+            >
+              inter2546@gmail.com
+            </a>
+
+            <button
+              type="button"
+              @click="copyEmail"
+              class="inline-flex items-center gap-2 cursor-pointer text-xs uppercase tracking-[0.18em] text-cream/60 transition-opacity duration-300 hover:text-cream"
+            >
+              <Check v-if="copied" :size="14" :stroke-width="1.5" />
+              <Copy v-else :size="14" :stroke-width="1.5" />
+              <span>{{ copied ? t.contact.copied : t.contact.copyEmail }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Two-Column Channels & Editorial Form -->
+        <div
+          :class="['editorial-reveal grid grid-cols-1 md:grid-cols-12 gap-y-16 md:gap-x-12 pt-10 border-t border-cream/15', visible && 'is-visible']"
+          style="transition-delay: 120ms"
+        >
+          <!-- Direct Channels -->
+          <div class="md:col-span-5 space-y-6">
+            <p class="text-xs uppercase tracking-[0.2em] text-cream/50">
+              {{ t.contact.directLabel }}
+            </p>
+
+            <ul class="border-t border-cream/15">
+              <li
+                v-for="ch in channels"
+                :key="ch.label"
+                class="border-b border-cream/15"
+              >
+                <a
+                  :href="ch.href"
+                  :target="ch.href.startsWith('http') ? '_blank' : undefined"
+                  :rel="ch.href.startsWith('http') ? 'noopener noreferrer' : undefined"
+                  class="flex items-center justify-between py-4 transition-opacity duration-300 hover:opacity-60"
+                >
+                  <div>
+                    <p class="text-xs uppercase tracking-[0.16em] text-cream/50">
+                      {{ ch.label }}
+                    </p>
+                    <p class="text-base text-cream mt-0.5">
+                      {{ ch.value }}
+                    </p>
+                  </div>
+                  <ArrowUpRight :size="18" :stroke-width="1.5" class="text-cream/70" />
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Editorial Message Form -->
+          <div class="md:col-span-7 space-y-6">
+            <p class="text-xs uppercase tracking-[0.2em] text-cream/50">
+              {{ t.contact.formLabel }}
+            </p>
+
+            <div v-if="sent" class="py-10 border-t border-cream/15 space-y-4">
+              <p class="text-2xl font-normal text-cream">
+                {{ t.contact.sentTitle }}
+              </p>
+              <p class="text-sm text-cream/65 leading-relaxed">
+                {{ t.contact.sentBody }}
+              </p>
+              <button
+                type="button"
+                @click="resetForm"
+                class="mt-2 cursor-pointer text-xs uppercase tracking-[0.18em] text-cream border-b border-cream/40 pb-0.5 transition-opacity duration-300 hover:opacity-60"
+              >
+                {{ t.contact.sendAnother }}
+              </button>
             </div>
 
-            <form v-else key="form" @submit.prevent="submit" class="space-y-4">
+            <form v-else @submit.prevent="submitForm" class="space-y-8">
               <div>
-                <label class="font-pixel text-[8px] text-muted block mb-2">{{ isTh ? 'ชื่อ *' : 'NAME *' }}</label>
+                <label for="contact-name" class="block text-xs uppercase tracking-[0.18em] text-cream/50 mb-2">
+                  {{ t.contact.nameLabel }}
+                </label>
                 <input
+                  id="contact-name"
                   v-model="form.name"
                   type="text"
                   required
-                  :placeholder="isTh ? 'ชื่อของคุณ' : 'your_name'"
-                  class="w-full bg-white/3 border border-primary/15 px-4 py-2.5 font-mono text-sm text-text placeholder-muted/40 focus:outline-none focus:border-primary/50 focus:bg-primary/3 transition-all"
+                  :placeholder="t.contact.namePlaceholder"
+                  class="w-full bg-transparent border-b border-cream/25 py-3 text-base text-cream placeholder-cream/30 focus:outline-none focus:border-cream transition-colors duration-300"
                 />
               </div>
+
               <div>
-                <label class="font-pixel text-[8px] text-muted block mb-2">{{ isTh ? 'อีเมล *' : 'EMAIL *' }}</label>
+                <label for="contact-email" class="block text-xs uppercase tracking-[0.18em] text-cream/50 mb-2">
+                  {{ t.contact.emailLabel }}
+                </label>
                 <input
+                  id="contact-email"
                   v-model="form.email"
                   type="email"
                   required
-                  placeholder="you@domain.com"
-                  class="w-full bg-white/3 border border-primary/15 px-4 py-2.5 font-mono text-sm text-text placeholder-muted/40 focus:outline-none focus:border-primary/50 focus:bg-primary/3 transition-all"
+                  :placeholder="t.contact.emailPlaceholder"
+                  class="w-full bg-transparent border-b border-cream/25 py-3 text-base text-cream placeholder-cream/30 focus:outline-none focus:border-cream transition-colors duration-300"
                 />
               </div>
+
               <div>
-                <label class="font-pixel text-[8px] text-muted block mb-2">{{ isTh ? 'ข้อความ *' : 'MESSAGE *' }}</label>
+                <label for="contact-message" class="block text-xs uppercase tracking-[0.18em] text-cream/50 mb-2">
+                  {{ t.contact.messageLabel }}
+                </label>
                 <textarea
-                  v-model="form.msg"
+                  id="contact-message"
+                  v-model="form.message"
                   required
                   rows="4"
-                  :placeholder="isTh ? 'บอกเล่าเกี่ยวกับโปรเจกต์ของคุณ...' : 'Tell me about your project...'"
-                  class="w-full bg-white/3 border border-primary/15 px-4 py-2.5 font-mono text-sm text-text placeholder-muted/40 focus:outline-none focus:border-primary/50 focus:bg-primary/3 transition-all resize-none"
+                  :placeholder="t.contact.messagePlaceholder"
+                  class="w-full bg-transparent border-b border-cream/25 py-3 text-base text-cream placeholder-cream/30 focus:outline-none focus:border-cream transition-colors duration-300 resize-none"
                 />
               </div>
-              <button
-                type="submit"
-                class="neon-btn w-full text-primary border-primary hover:bg-primary hover:text-bg transition-all cursor-pointer"
-              >
-                {{ isTh ? '> ส่งข้อความ' : '&gt; SEND_MESSAGE' }}
-              </button>
+
+              <div class="pt-2">
+                <button
+                  type="submit"
+                  class="cursor-pointer border border-cream px-8 py-3.5 text-xs uppercase tracking-[0.2em] text-cream transition-colors duration-300 hover:bg-cream hover:text-[#0a0a0a]"
+                >
+                  {{ t.contact.submit }}
+                </button>
+              </div>
             </form>
-          </transition>
-        </Terminal>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.4s ease; }
-.fade-enter-from, .fade-leave-to       { opacity: 0; }
-input, textarea { outline: none; }
 input:-webkit-autofill,
 textarea:-webkit-autofill {
-  box-shadow: 0 0 0 1000px #12121A inset !important;
-  -webkit-text-fill-color: #E5E7EB !important;
+  box-shadow: 0 0 0 1000px #0a0a0a inset !important;
+  -webkit-text-fill-color: #efeee9 !important;
 }
 </style>

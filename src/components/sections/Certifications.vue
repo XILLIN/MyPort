@@ -1,47 +1,50 @@
-
 <script setup>
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { X, ArrowUpRight } from 'lucide-vue-next'
 import { useI18n } from '../../composables/useI18n'
 
 const { t } = useI18n()
 
 const visible = ref(false)
 const selectedCert = ref(null)
-
 let observer
 
 watch(selectedCert, (cert) => {
-  document.body.style.overflow = cert ? 'hidden' : ''
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = cert ? 'hidden' : ''
+  }
 })
+
+function handleKeydown(e) {
+  if (e.key === 'Escape') {
+    selectedCert.value = null
+  }
+}
 
 onMounted(() => {
   const el = document.getElementById('certifications')
-
   if (el) {
-    observer = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) visible.value = true
-    }, { threshold: 0.1 })
-
+    observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          visible.value = true
+          observer?.disconnect()
+        }
+      },
+      { threshold: 0.1 }
+    )
     observer.observe(el)
   }
-
   window.addEventListener('keydown', handleKeydown)
 })
 
 onUnmounted(() => {
-  document.body.style.overflow = ''
+  if (typeof document !== 'undefined') {
+    document.body.style.overflow = ''
+  }
   observer?.disconnect()
   window.removeEventListener('keydown', handleKeydown)
 })
-
-function handleKeydown(e) {
-  if (e.key === 'Escape') selectedCert.value = null
-}
-
-function openCert(cert) {
-  if (!cert.file) return
-  selectedCert.value = cert
-}
 
 function isImage(file) {
   return /\.(jpg|jpeg|png|webp|svg|gif|avif)$/i.test(file || '')
@@ -50,153 +53,126 @@ function isImage(file) {
 const baseUrl = import.meta.env.BASE_URL
 const certs = [
   {
+    index: '01',
     title: 'Cyber Boot Camp',
-    issuer: 'RMUTL ARIT NCSAสกมช BDE',
+    issuer: 'RMUTL ARIT · NCSA สกมช · BDE',
     date: '21 Aug 2026',
-    icon: '🔐',
-    color: '#00F5A0',
     file: `${baseUrl}certificates/cyber_cert.jpg`,
   },
 ]
 </script>
 
 <template>
-  <section id="certifications" class="px-6 lg:px-16 py-20">
-    <div :class="['reveal', visible && 'visible']" class="mb-12">
-      <p class="font-pixel text-[9px] text-secondary tracking-widest mb-3">{{ t.certifications.cmd }}</p>
-      <h2 class="font-pixel text-xl sm:text-2xl text-text mb-1">{{ t.certifications.title }}</h2>
-      <div class="h-px w-24 bg-gradient-to-r from-primary to-transparent mt-3" />
-    </div>
+  <section id="certifications" class="px-6 sm:px-10 py-24 sm:py-36 font-hn text-cream">
+    <div :class="['editorial-rule h-0.5 w-full bg-cream mb-12 sm:mb-16', visible && 'is-visible']" />
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <button
-          v-for="(c, i) in certs"
-          :key="c.title"
-          type="button"
-          :class="[
-            'reveal group w-full text-left',
-            visible && 'visible'
-          ]"
-          :style="`transition-delay:${i * 0.07}s`"
-          :aria-label="`View certificate: ${c.title}`"
-          :disabled="!c.file"
-          @click="openCert(c)"
-        >
-        <div
-          class="glass-card p-5 h-full flex flex-col rounded-sm border transition-all duration-300 cursor-default"
-          :style="`border-color:${c.color}15`"
-          @mouseenter="e => e.currentTarget.style.borderColor = c.color + '50'"
-          @mouseleave="e => e.currentTarget.style.borderColor = c.color + '15'"
-        >
-          <!-- Icon -->
-          <div
-            class="w-12 h-12 flex items-center justify-center text-2xl mb-4 border"
-            :style="`border-color:${c.color}30;background:${c.color}08;box-shadow:0 0 12px ${c.color}20`"
-          >
-            {{ c.icon }}
-          </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-x-10">
+      <!-- Left Index Column -->
+      <div class="lg:col-span-3">
+        <p class="text-xs uppercase tracking-[0.2em] text-cream/50 sticky top-24">
+          {{ t.certifications.index }}
+        </p>
+      </div>
 
-          <h3 class="font-pixel text-[9px] leading-relaxed mb-2" :style="`color:${c.color}`">
-            {{ c.title }}
-          </h3>
-          <p class="font-mono text-[11px] text-muted flex-1">{{ c.issuer }}</p>
-
-          <div class="mt-4 pt-3 border-t flex items-center justify-between" :style="`border-color:${c.color}15`">
-            <span class="font-pixel text-[8px] text-muted">{{ c.date }}</span>
-            <span
-              class="font-pixel text-[7px] px-1.5 py-0.5 border"
-              :style="`color:${c.color};border-color:${c.color}30;background:${c.color}08`"
-            >{{ t.certifications.verified }}</span>
-          </div>
+      <!-- Right Content Column -->
+      <div class="lg:col-span-9 space-y-14">
+        <div :class="['editorial-reveal', visible && 'is-visible']">
+          <h2 class="text-3xl sm:text-5xl font-normal leading-[1.1] tracking-[-0.02em] text-cream max-w-3xl">
+            {{ t.certifications.headline }}
+          </h2>
         </div>
-      </button>
+
+        <div class="border-t border-cream/15">
+          <button
+            v-for="cert in certs"
+            :key="cert.title"
+            type="button"
+            @click="selectedCert = cert"
+            class="group w-full text-left cursor-pointer grid grid-cols-1 sm:grid-cols-12 gap-y-3 sm:gap-x-8 items-baseline py-8 border-b border-cream/15 transition-opacity duration-300 hover:opacity-70"
+          >
+            <div class="sm:col-span-5 flex items-baseline gap-4">
+              <span class="font-mono text-xs text-cream/40">{{ cert.index }}</span>
+              <span class="text-xl sm:text-2xl font-normal text-cream">
+                {{ cert.title }}
+              </span>
+            </div>
+
+            <span class="sm:col-span-4 text-sm text-cream/65">
+              {{ cert.issuer }}
+            </span>
+
+            <div class="sm:col-span-3 flex items-center justify-between sm:justify-end gap-5 text-xs uppercase tracking-[0.16em]">
+              <span class="text-cream/50">{{ cert.date }}</span>
+              <span class="inline-flex items-center gap-1 text-cream">
+                {{ t.certifications.inspect }}
+                <ArrowUpRight :size="14" :stroke-width="1.5" />
+              </span>
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
-    
+
+    <!-- Editorial Lightbox Modal -->
     <Teleport to="body">
-      <Transition name="cert-modal">
+      <Transition name="cert-fade">
         <div
           v-if="selectedCert"
-          class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8"
+          class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-10 font-hn text-cream"
           role="dialog"
           aria-modal="true"
           :aria-label="selectedCert.title"
           @click.self="selectedCert = null"
         >
-          <!-- Backdrop -->
           <div
-            class="absolute inset-0 bg-black/85 backdrop-blur-sm"
+            class="absolute inset-0 bg-black/80 backdrop-blur-sm"
             @click="selectedCert = null"
           />
 
-          <!-- Modal -->
-          <div
-            class="modal-window relative z-10 flex flex-col max-h-[90vh] border rounded-sm overflow-hidden"
-            :class="isImage(selectedCert.file) ? 'w-auto max-w-[92vw] md:max-w-4xl' : 'w-full max-w-5xl'"
-            :style="{
-              borderColor: `${selectedCert.color}60`,
-              background: '#0b0f0e',
-              boxShadow: `0 0 30px ${selectedCert.color}15`,
-            }"
-          >
+          <div class="relative z-10 flex max-h-[90vh] w-full max-w-4xl flex-col bg-[#141414] border border-cream/20">
             <!-- Header -->
-            <div
-              class="flex items-center gap-3 p-4 border-b"
-              :style="{ borderColor: `${selectedCert.color}30` }"
-            >
-              <div class="flex-1 min-w-0">
-                <p
-                  class="font-pixel text-[8px] mb-2"
-                  :style="{ color: selectedCert.color }"
-                >
-                  {{ t.certifications.viewerExe }}
+            <div class="flex items-start justify-between gap-6 px-6 py-5 border-b border-cream/15">
+              <div>
+                <p class="text-[11px] uppercase tracking-[0.2em] text-cream/50 mb-1">
+                  {{ t.certifications.verified }} · {{ selectedCert.date }}
                 </p>
-
-                <h3 class="font-mono text-sm text-text truncate">
+                <h3 class="text-lg sm:text-xl font-normal text-cream">
                   {{ selectedCert.title }}
                 </h3>
-
-                <p class="font-mono text-[10px] text-muted mt-1">
-                  {{ selectedCert.issuer }} / {{ selectedCert.date }}
+                <p class="text-xs text-cream/60 mt-0.5">
+                  {{ selectedCert.issuer }}
                 </p>
               </div>
 
               <button
                 type="button"
-                class="font-mono text-xl px-3 py-1 border hover:bg-white/10"
-                :style="{
-                  color: selectedCert.color,
-                  borderColor: `${selectedCert.color}40`,
-                }"
-                aria-label="Close certificate"
                 @click="selectedCert = null"
+                :aria-label="t.certifications.close"
+                class="cursor-pointer p-1 text-cream transition-opacity duration-300 hover:opacity-60"
               >
-                ×
+                <X :size="24" :stroke-width="1.5" />
               </button>
             </div>
 
-            <!-- Certificate preview -->
-            <div class="flex-1 min-h-0 overflow-auto bg-black/40 p-2 sm:p-4 flex items-center justify-center">
+            <!-- Content -->
+            <div class="flex-1 min-h-0 overflow-auto bg-[#0a0a0a] p-4 sm:p-6 flex items-center justify-center">
               <img
                 v-if="isImage(selectedCert.file)"
                 :src="selectedCert.file"
                 :alt="`${selectedCert.title} certificate`"
-                class="max-h-[70vh] w-auto max-w-full object-contain rounded-xs select-none"
+                class="max-h-[68vh] w-auto max-w-full object-contain select-none"
               />
               <iframe
                 v-else
-                :key="selectedCert.file"
                 :src="selectedCert.file"
                 :title="`${selectedCert.title} certificate`"
-                class="w-full h-[60vh] border-0"
+                class="w-full h-[65vh] border-0"
               />
             </div>
 
             <!-- Footer -->
-            <div
-              class="flex flex-wrap items-center justify-between gap-3 p-4 border-t"
-              :style="{ borderColor: `${selectedCert.color}30` }"
-            >
-              <span class="font-mono text-[10px] text-muted">
+            <div class="flex items-center justify-between gap-4 px-6 py-4 border-t border-cream/15 text-xs">
+              <span class="font-mono text-cream/45">
                 {{ selectedCert.file.split('/').pop() }}
               </span>
 
@@ -204,13 +180,10 @@ const certs = [
                 :href="selectedCert.file"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="neon-btn font-mono text-xs px-4 py-2"
-                :style="{
-                  color: selectedCert.color,
-                  borderColor: `${selectedCert.color}60`,
-                }"
+                class="inline-flex items-center gap-1.5 uppercase tracking-[0.16em] text-cream transition-opacity duration-300 hover:opacity-60"
               >
-                {{ t.certifications.openOriginal }}
+                <span>{{ t.certifications.openOriginal }}</span>
+                <ArrowUpRight :size="14" :stroke-width="1.5" />
               </a>
             </div>
           </div>
@@ -221,24 +194,12 @@ const certs = [
 </template>
 
 <style scoped>
-.cert-modal-enter-active,
-.cert-modal-leave-active {
-  transition: opacity 0.25s ease;
+.cert-fade-enter-active,
+.cert-fade-leave-active {
+  transition: opacity 0.3s ease;
 }
-
-.cert-modal-enter-active .modal-window,
-.cert-modal-leave-active .modal-window {
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
-}
-
-.cert-modal-enter-from,
-.cert-modal-leave-to {
+.cert-fade-enter-from,
+.cert-fade-leave-to {
   opacity: 0;
-}
-
-.cert-modal-enter-from .modal-window,
-.cert-modal-leave-to .modal-window {
-  opacity: 0;
-  transform: scale(0.95) translateY(10px);
 }
 </style>

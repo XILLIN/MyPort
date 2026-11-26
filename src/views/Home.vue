@@ -1,48 +1,70 @@
 <script setup>
-import Hero           from '../components/sections/Hero.vue'
-import About          from '../components/sections/About.vue'
-import Experience     from '../components/sections/Experience.vue'
-import Projects       from '../components/sections/Projects.vue'
-import Skills         from '../components/sections/Skills.vue'
+import { ArrowUp } from 'lucide-vue-next'
+import StickyNav from '../components/StickyNav.vue'
+import Hero from '../components/sections/Hero.vue'
+import About from '../components/sections/About.vue'
+import Experience from '../components/sections/Experience.vue'
+import Projects from '../components/sections/Projects.vue'
+import Skills from '../components/sections/Skills.vue'
 import Certifications from '../components/sections/Certifications.vue'
-import Contact        from '../components/sections/Contact.vue'
-import { useI18n }    from '../composables/useI18n'
+import Contact from '../components/sections/Contact.vue'
+import { useI18n } from '../composables/useI18n'
 
-const { t } = useI18n()
+const { t, lang, setLang } = useI18n()
+
+function scrollToTop() {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+function toggleLanguage() {
+  setLang(lang.value === 'en' ? 'th' : 'en')
+}
 </script>
 
 <template>
-  <div class="relative z-10">
-    <Hero />
+  <div class="min-h-screen bg-[#0a0a0a] text-cream font-hn">
+    <!-- Minimal sticky bar appears only after scrolling past the 100dvh hero -->
+    <StickyNav />
 
-    <!-- Section divider -->
-    <div class="mx-6 lg:mx-16 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+    <main>
+      <Hero />
+      <About />
+      <Experience />
+      <Projects />
+      <Skills />
+      <Certifications />
+      <Contact />
+    </main>
 
-    <About />
-    <div class="mx-6 lg:mx-16 h-px bg-gradient-to-r from-transparent via-secondary/20 to-transparent" />
+    <!-- Editorial Site Footer -->
+    <footer class="px-6 sm:px-10 pb-10 pt-4 font-hn text-cream">
+      <div class="h-0.5 w-full bg-cream mb-8" />
 
-    <Experience />
-    <div class="mx-6 lg:mx-16 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 text-xs sm:text-sm">
+        <div class="space-y-1">
+          <p>{{ t.footer.left }}</p>
+          <p class="text-cream/45">&copy; {{ new Date().getFullYear() }} {{ t.brand }}</p>
+        </div>
 
-    <Projects />
-    <div class="mx-6 lg:mx-16 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        <div class="flex items-center gap-8">
+          <button
+            type="button"
+            @click="toggleLanguage"
+            class="cursor-pointer text-xs uppercase tracking-[0.18em] text-cream/60 transition-opacity duration-300 hover:text-cream"
+          >
+            {{ lang === 'en' ? 'EN / TH' : 'TH / EN' }}
+          </button>
 
-    <Skills />
-    <div class="mx-6 lg:mx-16 h-px bg-gradient-to-r from-transparent via-secondary/20 to-transparent" />
-
-    <Certifications />
-    <div class="mx-6 lg:mx-16 h-px bg-gradient-to-r from-transparent via-accent/20 to-transparent" />
-
-    <Contact />
-
-    <!-- Footer -->
-    <footer class="border-t border-primary/10 px-6 lg:px-16 py-8 text-center">
-      <p class="font-pixel text-[8px] text-muted tracking-widest">
-        {{ t.footer.builtWith }}
-      </p>
-      <p class="font-mono text-xs text-muted/50 mt-2">
-        © {{ new Date().getFullYear() }} — {{ t.footer.systemsOnline }} <span class="text-primary blink">_</span>
-      </p>
+          <button
+            type="button"
+            @click="scrollToTop"
+            class="inline-flex items-center gap-1.5 cursor-pointer text-cream transition-opacity duration-300 hover:opacity-60"
+          >
+            <span>{{ t.footer.backToTop }}</span>
+            <ArrowUp :size="15" :stroke-width="1.5" />
+          </button>
+        </div>
+      </div>
     </footer>
   </div>
 </template>
