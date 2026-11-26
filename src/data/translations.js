@@ -28,7 +28,7 @@ export const translations = {
     about: {
       index: '01 / Story',
       headline: 'Building reliable server systems and immersive FiveM worlds — shaped by curiosity, engineering discipline, and years of iteration.',
-      bioP1: "I'm a Software Engineering student and developer who has been fascinated by computers since childhood. What began as a love for computers and video games eventually grew into a passion for programming and building systems of my own.",
+      bioP1: "Hi, my name is Phromphithak Kaemkhunthot, and you can call me Inter. I’m a software engineering student who has loved computers since I was a kid. I started out playing games and exploring different things on the computer, but over time I became curious about how everything worked behind the scenes. That curiosity grew into a passion for coding and building systems of my own.",
       bioP2: "I've explored different areas of technology, from electronics and IoT to web development and game-server scripting. Over time, I became particularly interested in backend development, server-side logic, and understanding how complex systems work behind the scenes.",
       bioP3: "My experience with FiveM has taught me to approach problems through experimentation, troubleshooting, and continuous learning. I'm interested not only in making features work, but also in understanding performance, security, and maintainability.",
       bioP4: "Today, I'm continuing to grow as a software developer while building a new chapter with RERUN Community — turning what I've learned over the years into reliable, engaging systems.",
